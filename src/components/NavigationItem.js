@@ -5,7 +5,10 @@ class NavigationItem extends Component {
   render() {
      const { name, navItemClass, path } = this.props
       return (
-        <Link to={ path } className={"App__navigation-item " + navItemClass}>
+        <Link 
+          to={ path } 
+          className={"App__navigation-item " + navItemClass}
+        >
           {name}
         </Link>
       );

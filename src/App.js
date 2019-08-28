@@ -20,10 +20,14 @@ class App extends Component {
   getLoginPass = () => document.querySelector('.App__login-pass').value
 
   checkLocalStorage = () => {
-    localStorage.getItem('login')==='true' &&
-    this.setState({
-      isLoggedIn: true
-    })
+    if (localStorage.getItem('login')==='true') {
+      this.setState({
+        isLoggedIn: true
+      })
+      this.getVisibleNav(true)
+    } else {
+      this.getVisibleNav(false)
+    }
   }
 
   componentDidMount() {
@@ -40,6 +44,7 @@ class App extends Component {
       if (verifyName && verifyPass) {
         e.preventDefault()
         localStorage.setItem('login', 'true')
+        this.getVisibleNav(true)
         this.setState({
           isLoggedIn: true
         })
@@ -56,17 +61,32 @@ class App extends Component {
 
   logOut = () => {
     localStorage.setItem('login', 'false')
+    this.getVisibleNav(false)
     this.setState({
       isLoggedIn: false
     })
   }
-
+  getVisibleNav = (bool) => {
+    let login = document.querySelector('.App__navigation-login')
+    let profile = document.querySelector('.App__navigation-profile')
+    bool ? this.getVisibleElem([profile], [login]) : this.getVisibleElem([login], [profile])
+  }
+  getVisibleElem = (visible = [], noVisible = []) => {
+    visible.map(a => {
+      a.style.opacity = '1'
+      a.style.pointerEvents = 'auto'
+    })
+    noVisible.map(a => {
+      a.style.opacity = '0'
+      a.style.pointerEvents = 'none'
+    })
+  }
   render() {
       const { isLoggedIn,  verifyError } = this.state
       return (
         <Router>
           <div className="App">
-            <Navigation/>
+            <Navigation />
             
             <Route path="/" component={Main} exact/>
             <Route path="/news" component={News}/>
